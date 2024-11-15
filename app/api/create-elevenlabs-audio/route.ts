@@ -6,7 +6,7 @@ const client = new ElevenLabsClient({
   apiKey: ELEVENLABS_API_KEY,
 });
 
-export const createAudioFromText = async (text: string) => {
+const createAudioFromText = async (text: string) => {
   const audio = await client.generate({
     voice: "Rachel",
     model_id: "eleven_multilingual_v2",
