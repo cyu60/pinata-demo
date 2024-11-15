@@ -1,36 +1,49 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 🌟 VoiceVault IPFS
 
-## Getting Started
+A Next.js application for experimenting with decentralized file storage and text-to-speech conversion using Pinata IPFS and ElevenLabs to prep for HackUTD
 
-First, run the development server:
+## Features
+
+- 📁 Upload and store files on IPFS via Pinata
+- 🔊 Convert text to speech using ElevenLabs
+- 🔐 Secure file storage with JWT authentication
+- 📱 Responsive UI with Tailwind CSS
+- 🎯 Real-time file preview
+- 📋 File management dashboard
+
+## Setup
+
+1. Clone this repository
+2. Create a `.env` file based on `.env.example`
+3. Fill in your environment variables:
+   - Get your Pinata JWT and Gateway URL from [Pinata](https://app.pinata.cloud/)
+   - Get your ElevenLabs API key from [ElevenLabs](https://elevenlabs.io/)
+
+## Environment Variables
+
+The following environment variables are required:
+
+- `PINATA_JWT`: Your Pinata JWT token for IPFS storage
+- `NEXT_PUBLIC_GATEWAY_URL`: Your Pinata Gateway URL
+- `ELEVENLABS_API_KEY`: Your ElevenLabs API key for text-to-speech conversion
+
+## Development
 
 ```bash
+npm install
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Important Notes
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+- Never commit your `.env` file
+- Always use `.env.example` as a template for required environment variables
+- This project is intended as a learning resource for working with Pinata's SDK
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Tech Stack
 
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- Next.js 14
+- TypeScript
+- Tailwind CSS
+- Pinata SDK
+- ElevenLabs API
