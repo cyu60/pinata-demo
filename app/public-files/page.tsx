@@ -122,7 +122,7 @@ export default function PublicFiles() {
                   : "bg-blue-600 hover:bg-blue-700"
               } transition-colors`}
           >
-            {uploading ? "Uploading..." : "Upload to IPFS"}
+            {uploading ? "Uploading..." : "Upload via Pinata"}
           </button>
 
           {/* Preview Section */}
@@ -139,7 +139,7 @@ export default function PublicFiles() {
                   rel="noopener noreferrer"
                   className="text-blue-600 hover:text-blue-800 underline text-sm"
                 >
-                  View on IPFS
+                  View on Pinata
                 </a>
               </div>
             </div>

@@ -95,7 +95,7 @@ export default function STTStorage() {
               rel="noopener noreferrer"
               className="text-blue-600 hover:text-blue-800 underline text-sm mt-2 inline-block"
             >
-              View on IPFS
+              View on Pinata
             </a>
           </div>
         )}

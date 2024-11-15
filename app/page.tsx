@@ -131,7 +131,7 @@ export default function Home() {
                 Uploading...
               </span>
             ) : (
-              "Upload to IPFS"
+              "Upload via Pinata"
             )}
           </button>
 
