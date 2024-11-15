@@ -7,5 +7,8 @@ export const pinata = new PinataSDK({
   pinataGateway: `${process.env.NEXT_PUBLIC_GATEWAY_URL}`,
 });
 
-export const getGatewayUrl = (cid: string) =>
-  `https://${process.env.NEXT_PUBLIC_GATEWAY_URL}/ipfs/${cid}`;
+export const PUBLIC_GROUP_ID = "voicevault-public";
+
+export const getFileUrl = (cid: string): string => {
+  return `https://${process.env.NEXT_PUBLIC_GATEWAY_URL}/files/${cid}`;
+};

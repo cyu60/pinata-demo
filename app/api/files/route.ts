@@ -11,6 +11,7 @@ export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
   const limit = searchParams.get("limit") || "100";
   const pageToken = searchParams.get("pageToken");
+  const groupId = searchParams.get("groupId");
 
   const query = new URLSearchParams({
     limit,
@@ -20,12 +21,15 @@ export async function GET(request: Request) {
     query.append("pageToken", pageToken);
   }
 
+  if (groupId) {
+    query.append("group", groupId);
+  }
+
   try {
     const response = await fetch(`${PINATA_API_URL}?${query.toString()}`, {
       method: "GET",
       headers: {
         Authorization: `Bearer ${PINATA_JWT}`,
-        // 'Content-Type': 'application/json', // Typically not needed for GET requests
       },
     });
 

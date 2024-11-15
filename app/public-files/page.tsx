@@ -1,42 +1,59 @@
 "use client";
 
-import { useState } from "react";
-import { pinata } from "@/utils/config";
-import Link from "next/link";
+import { useState, useEffect } from "react";
+import { pinata, getFileUrl } from "@/utils/config";
+import FilesList from "../components/FilesList";
 
-export default function Home() {
+export default function PublicFiles() {
   const [file, setFile] = useState<File | null>(null);
   const [url, setUrl] = useState<string>("");
   const [uploading, setUploading] = useState<boolean>(false);
+  const [error, setError] = useState<string>("");
+  const [groupId, setGroupId] = useState<string>("");
+
+  useEffect(() => {
+    const initializeGroup = async () => {
+      try {
+        const response = await fetch("/api/init-group");
+        if (!response.ok) {
+          throw new Error("Failed to initialize group");
+        }
+        const group = await response.json();
+        setGroupId(group.id);
+      } catch (err) {
+        console.error(err);
+        setError("Failed to initialize group");
+      }
+    };
+
+    initializeGroup();
+  }, []);
 
   const uploadFile = async () => {
-    if (!file) {
-      alert("No file selected");
+    if (!file || !groupId) {
+      alert("No file selected or group not initialized");
       return;
     }
 
-    const formData = new FormData();
-    formData.append("file", file);
-
     try {
       setUploading(true);
+      setError("");
+
       const keyRequest = await fetch("/api/key");
       const keyData = await keyRequest.json();
-      const upload = await pinata.upload.file(file).key(keyData.JWT);
-      const urlRequest = await fetch("/api/sign", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ cid: upload.cid }),
-      });
-      const url = await urlRequest.json();
-      setUrl(url);
+      const upload = await pinata.upload
+        .file(file)
+        .group(groupId)
+        .key(keyData.JWT);
+
+      console.log("upload", upload);
+      const publicUrl = getFileUrl(upload.cid);
+      setUrl(publicUrl);
       setUploading(false);
-    } catch (e) {
-      console.log(e);
+    } catch (err) {
+      console.error(err);
+      setError("Failed to upload file");
       setUploading(false);
-      alert("Trouble uploading file");
     }
   };
 
@@ -74,7 +91,7 @@ export default function Home() {
     <main className="w-full min-h-screen bg-gray-50 p-8">
       <div className="max-w-2xl mx-auto bg-white rounded-xl shadow-md p-8">
         <h1 className="text-2xl font-bold text-gray-800 mb-6 text-center">
-          Private File Upload
+          Public File Upload
         </h1>
 
         <div className="space-y-6">
@@ -82,7 +99,6 @@ export default function Home() {
           <div className="flex flex-col items-center p-6 border-2 border-dashed border-gray-300 rounded-lg hover:border-gray-400 transition-colors">
             <input
               type="file"
-              accept="image/*,video/*,audio/*,application/pdf"
               onChange={handleChange}
               className="file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100 cursor-pointer"
             />
@@ -106,33 +122,7 @@ export default function Home() {
                   : "bg-blue-600 hover:bg-blue-700"
               } transition-colors`}
           >
-            {uploading ? (
-              <span className="flex items-center justify-center">
-                <svg
-                  className="animate-spin -ml-1 mr-3 h-5 w-5 text-white"
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                >
-                  <circle
-                    className="opacity-25"
-                    cx="12"
-                    cy="12"
-                    r="10"
-                    stroke="currentColor"
-                    strokeWidth="4"
-                  ></circle>
-                  <path
-                    className="opacity-75"
-                    fill="currentColor"
-                    d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-                  ></path>
-                </svg>
-                Uploading...
-              </span>
-            ) : (
-              "Upload to IPFS"
-            )}
+            {uploading ? "Uploading..." : "Upload to IPFS"}
           </button>
 
           {/* Preview Section */}
@@ -149,19 +139,21 @@ export default function Home() {
                   rel="noopener noreferrer"
                   className="text-blue-600 hover:text-blue-800 underline text-sm"
                 >
-                  View File
+                  View on IPFS
                 </a>
               </div>
             </div>
           )}
 
-          {/* Navigation Button */}
-          <Link
-            href="/text2speech-storage"
-            className="mt-6 block w-full py-2 px-4 rounded-md bg-green-600 hover:bg-green-700 text-white font-medium transition-colors text-center"
-          >
-            Try out Text to Speech Storage
-          </Link>
+          {/* Files List Section */}
+          <div className="mt-8">
+            <h2 className="text-lg font-semibold text-gray-700 mb-4">
+              Public Files
+            </h2>
+            <FilesList groupId={groupId} />
+          </div>
+
+          {error && <p className="text-red-500 mt-4">{error}</p>}
         </div>
       </div>
     </main>

@@ -9,11 +9,7 @@ export async function GET() {
     const keyData = await pinata.keys.create({
       keyName: uuid.toString(),
       permissions: {
-        endpoints: {
-          pinning: {
-            pinFileToIPFS: true,
-          },
-        },
+        admin: true,
       },
       maxUses: 1,
     });

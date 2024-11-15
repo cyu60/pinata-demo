@@ -1,10 +1,10 @@
-# 🌟 VoiceVault IPFS
+# 🌟 VoiceVault
 
-A Next.js application for experimenting with decentralized file storage and text-to-speech conversion using Pinata IPFS and ElevenLabs to prep for HackUTD
+A Next.js application for experimenting with cloud storage and text-to-speech conversion using Pinata Storage and ElevenLabs to prep for HackUTD
 
 ## Features
 
-- 📁 Upload and store files on IPFS via Pinata
+- 📁 Upload and store files using Pinata as S3 alternative
 - 🔊 Convert text to speech using ElevenLabs
 - 🔐 Secure file storage with JWT authentication
 - 📱 Responsive UI with Tailwind CSS
@@ -45,5 +45,12 @@ npm run dev
 - Next.js 14
 - TypeScript
 - Tailwind CSS
-- Pinata SDK
+- Pinata Storage
 - ElevenLabs API
+
+## Documentation References
+
+- [Pinata File Groups Documentation](https://docs.pinata.cloud/files/file-groups) - Learn about organizing and managing files in Pinata Storage
+- [ElevenLabs Streaming Guide](https://elevenlabs.io/docs/developer-guides/how-to-use-tts-with-streaming) - Guide for text-to-speech with streaming
+- [Next.js Integration with Pinata](https://docs.pinata.cloud/frameworks/next-js-files) - Official guide for using Pinata with Next.js
+- [Example Repository](https://github.com/cyu60/pinata-demo) - Reference implementation
