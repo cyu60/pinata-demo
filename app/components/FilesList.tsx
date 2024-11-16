@@ -64,12 +64,16 @@ export default function FilesList({ groupId }: FilesListProps) {
           className="p-4 border rounded-lg flex justify-between items-center"
         >
           <div>
-            <p className="font-medium">{file.name || "Unnamed File"}</p>
-            <p className="text-sm text-gray-500">CID: {file.cid}</p>
-            <p className="text-sm text-gray-500">
+            <p className="font-medium max-w-[200px] truncate sm:max-w-none sm:truncate-none">
+              {file.name || "Unnamed File"}
+            </p>
+            <p className="text-sm text-gray-500 max-w-[200px] truncate sm:max-w-none sm:truncate-none">
+              CID: {file.cid}
+            </p>
+            <p className="text-sm text-gray-500 max-w-[200px] truncate sm:max-w-none sm:truncate-none">
               Size: {(file.size / (1024 * 1024)).toFixed(2)} MB
             </p>
-            <p className="text-sm text-gray-500">
+            <p className="text-sm text-gray-500 max-w-[200px] truncate sm:max-w-none sm:truncate-none">
               Uploaded At: {new Date(file.created_at).toLocaleString()}
             </p>
           </div>

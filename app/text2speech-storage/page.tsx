@@ -68,30 +68,28 @@ export default function Text2SpeechStorage() {
 
   return (
     <div className="w-full min-h-screen bg-gray-50 p-8">
-      <div className="max-w-2xl mx-auto bg-white rounded-xl shadow-md p-8">
+      <div className="max-w-2xl mx-auto bg-white rounded-xl shadow-md p-8 sm:p-6 lg:p-8">
         <h1 className="text-2xl font-bold text-gray-800 mb-6 text-center">
           Public Text to Speech Storage
         </h1>
 
         <form onSubmit={handleSubmit} className="space-y-4">
-          <input
-            type="text"
+          <textarea
             value={text}
             onChange={(e) => setText(e.target.value)}
             placeholder="Enter text to convert to audio"
-            className="w-full px-4 py-2 border rounded-md"
+            className="w-full px-4 py-2 border rounded-md sm:px-3 sm:py-1 lg:px-4 lg:py-2 resize-y min-h-[100px]"
+            rows={4}
           />
           <button
             type="submit"
-            disabled={uploading || !groupId}
+            disabled={uploading}
             className={`w-full py-2 px-4 rounded-md text-white font-medium
               ${
-                !groupId
-                  ? "bg-gray-300 cursor-not-allowed"
-                  : uploading
+                uploading
                   ? "bg-blue-400 cursor-wait"
                   : "bg-blue-600 hover:bg-blue-700"
-              } transition-colors`}
+              } transition-colors sm:py-1 sm:px-3 lg:py-2 lg:px-4`}
           >
             {uploading ? "Generating Audio..." : "Submit"}
           </button>
@@ -99,15 +97,16 @@ export default function Text2SpeechStorage() {
 
         {audioUrl && (
           <div className="mt-8">
-            <h2 className="text-lg font-semibold text-gray-700 mb-4">
+            <h2 className="text-lg font-semibold text-gray-700 mb-4 sm:text-base lg:text-lg">
               Generated Audio
             </h2>
-            <audio src={audioUrl} controls className="w-full" />
+            <audio src={audioUrl} controls className="w-full sm:w-auto" />
             <a
               href={audioUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="text-blue-600 hover:text-blue-800 underline text-sm mt-2 inline-block"
+              className="text-blue-600 hover:text-blue-800 underline text-sm mt-2 inline-block sm:text-xs lg:text-sm truncate max-w-xs"
+              title={audioUrl}
             >
               View File
             </a>
