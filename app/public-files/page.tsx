@@ -96,14 +96,24 @@ export default function PublicFiles() {
 
         <div className="space-y-6">
           {/* File Input Section */}
-          <div className="flex flex-col items-center p-6 border-2 border-dashed border-gray-300 rounded-lg hover:border-gray-400 transition-colors">
-            <input
-              type="file"
-              onChange={handleChange}
-              className="file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100 cursor-pointer"
-            />
+          <div className="flex flex-col items-center p-4 sm:p-6 border-2 border-dashed border-gray-300 rounded-lg hover:border-gray-400 transition-colors">
+            <div className="w-full">
+              <input
+                type="file"
+                onChange={handleChange}
+                className="w-full text-sm text-gray-500 
+                  file:mr-4 file:py-2 file:px-4 
+                  file:rounded-full file:border-0 
+                  file:text-sm file:font-semibold 
+                  file:bg-blue-50 file:text-blue-700 
+                  hover:file:bg-blue-100 
+                  file:cursor-pointer
+                  sm:file:mr-5 sm:file:py-2.5 sm:file:px-6
+                  focus:outline-none"
+              />
+            </div>
             {file && (
-              <p className="mt-2 text-sm text-gray-500">
+              <p className="mt-2 text-xs sm:text-sm text-gray-500 truncate w-full text-center">
                 Selected: {file.name}
               </p>
             )}
