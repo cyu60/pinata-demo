@@ -1,13 +1,15 @@
 "use client";
 
 import { useState } from "react";
-import { pinata } from "@/utils/config";
 import Link from "next/link";
+import mammoth from "mammoth";
+import { pinata } from "@/utils/config";
 
 export default function Home() {
   const [file, setFile] = useState<File | null>(null);
   const [url, setUrl] = useState<string>("");
   const [uploading, setUploading] = useState<boolean>(false);
+  const [docxContent, setDocxContent] = useState<string>("");
 
   const uploadFile = async () => {
     if (!file) {
@@ -40,8 +42,27 @@ export default function Home() {
     }
   };
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setFile(e.target?.files?.[0] || null);
+  const handleChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const selectedFile = e.target?.files?.[0] || null;
+    setFile(selectedFile);
+
+    // Reset DOCX content when new file is selected
+    setDocxContent("");
+
+    // Parse DOCX if the file is a DOCX
+    if (
+      selectedFile?.type ===
+      "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+    ) {
+      try {
+        const arrayBuffer = await selectedFile.arrayBuffer();
+        const result = await mammoth.convertToHtml({ arrayBuffer });
+        setDocxContent(result.value);
+      } catch (error) {
+        console.error("Error parsing DOCX:", error);
+        setDocxContent("Error extracting content from DOCX");
+      }
+    }
   };
 
   const renderContent = () => {
@@ -67,6 +88,24 @@ export default function Home() {
         </div>
       );
     }
+    if (
+      fileType ===
+      "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+    ) {
+      return (
+        <div className="w-full max-w-2xl">
+          <div className="bg-gray-100 p-4 rounded-lg">
+            <div
+              className="prose max-w-none"
+              dangerouslySetInnerHTML={{
+                __html:
+                  docxContent || "No content could be extracted from this DOCX",
+              }}
+            />
+          </div>
+        </div>
+      );
+    }
     return <a href={url}>Download File</a>;
   };
 
@@ -83,7 +122,7 @@ export default function Home() {
             <div className="w-full">
               <input
                 type="file"
-                accept="image/*,video/*,audio/*,application/pdf"
+                accept="image/*,video/*,audio/*,application/vnd.openxmlformats-officedocument.wordprocessingml.document"
                 onChange={handleChange}
                 className="w-full text-sm text-gray-500 
                   file:mr-4 file:py-2 file:px-4 

@@ -11,7 +11,9 @@
   "dependencies": {
     "axios": "^1.7.7",
     "elevenlabs": "^0.18.0",
+    "mammoth": "^1.8.0",
     "next": "15.0.3",
+    "pdf-lib": "^1.17.1",
     "pinata": "^1.7.2",
     "react": "19.0.0-rc-66855b96-20241106",
     "react-dom": "19.0.0-rc-66855b96-20241106",
