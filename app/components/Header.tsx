@@ -7,7 +7,7 @@ const navLinks = [
   { href: "/", label: "Home" },
   { href: "/public-files", label: "Upload Public Files" },
   { href: "/group-files", label: "All Public Files" },
-  { href: "/text2speech-storage", label: "Text to Speech" },
+  { href: "/public-text2speech", label: "Text to Speech" },
 ];
 
 export default function Header() {

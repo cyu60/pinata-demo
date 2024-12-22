@@ -12,9 +12,13 @@ interface FileListItem {
 
 interface GroupFilesListProps {
   groupId: string;
+  filterMimeType?: string;
 }
 
-export default function GroupFilesList({ groupId }: GroupFilesListProps) {
+export default function GroupFilesList({
+  groupId,
+  filterMimeType,
+}: GroupFilesListProps) {
   const [files, setFiles] = useState<FileListItem[]>([]);
   const [error, setError] = useState<string>("");
   const [loading, setLoading] = useState(true);
@@ -27,7 +31,15 @@ export default function GroupFilesList({ groupId }: GroupFilesListProps) {
         throw new Error("Failed to fetch group files");
       }
       const data = await response.json();
-      setFiles(data.data.files);
+
+      // Filter files by MIME type if specified
+      const filteredFiles = filterMimeType
+        ? data.data.files.filter((file: FileListItem) =>
+            file.mime_type.startsWith(filterMimeType)
+          )
+        : data.data.files;
+
+      setFiles(filteredFiles);
     } catch (e) {
       console.error(e);
       setError("Error fetching group files");
@@ -40,7 +52,7 @@ export default function GroupFilesList({ groupId }: GroupFilesListProps) {
     if (groupId) {
       fetchGroupFiles();
     }
-  }, [groupId]);
+  }, [groupId, filterMimeType]);
 
   if (loading) {
     return (
@@ -57,7 +69,11 @@ export default function GroupFilesList({ groupId }: GroupFilesListProps) {
   return (
     <div className="space-y-4">
       {files.length === 0 ? (
-        <p className="text-gray-500">No files in this group yet.</p>
+        <p className="text-gray-500">
+          {filterMimeType
+            ? `No ${filterMimeType} files in this group yet.`
+            : "No files in this group yet."}
+        </p>
       ) : (
         files.map((file) => (
           <div
@@ -65,27 +81,31 @@ export default function GroupFilesList({ groupId }: GroupFilesListProps) {
             className="p-4 border rounded-lg flex justify-between items-center"
           >
             <div>
-              <p className="font-medium max-w-[200px] truncate sm:max-w-none sm:truncate-none">
-                {file.name || "Unnamed File"}
-              </p>
-              <p className="text-sm text-gray-500 max-w-[200px] truncate sm:max-w-none sm:truncate-none">
-                CID: {file.cid}
-              </p>
-              <p className="text-sm text-gray-500 max-w-[200px] truncate sm:max-w-none sm:truncate-none">
+              <p className="font-medium">{file.name || "Unnamed File"}</p>
+              <p className="text-sm text-gray-500">Type: {file.mime_type}</p>
+              <p className="text-sm text-gray-500">
                 Size: {(file.size / (1024 * 1024)).toFixed(2)} MB
               </p>
-              <p className="text-sm text-gray-500 max-w-[200px] truncate sm:max-w-none sm:truncate-none">
-                Uploaded At: {new Date(file.created_at).toLocaleString()}
+              <p className="text-sm text-gray-500">
+                Created: {new Date(file.created_at).toLocaleString()}
               </p>
             </div>
-            <a
-              href={getFileUrl(file.cid)}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-blue-600 hover:text-blue-800"
-            >
-              View
-            </a>
+            <div className="flex flex-col space-y-2">
+              {file.mime_type.startsWith("audio/") && (
+                <audio controls className="w-48">
+                  <source src={getFileUrl(file.cid)} type={file.mime_type} />
+                  Your browser does not support the audio element.
+                </audio>
+              )}
+              <a
+                href={getFileUrl(file.cid)}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-blue-600 hover:text-blue-800 text-center"
+              >
+                Download
+              </a>
+            </div>
           </div>
         ))
       )}

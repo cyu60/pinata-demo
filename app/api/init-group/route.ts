@@ -8,7 +8,8 @@ export async function GET() {
 
     // Look for a group with our specific name
     const existingGroup = groups.groups.find(
-      (group) => group.name === "VoiceVault Public Files" && group.is_public
+      (group) => group.name === "Public Files" && group.is_public
+      // (group) => group.name === "VoiceVault Public Files" && group.is_public
     );
     console.log("existingGroup", existingGroup);
 
@@ -18,7 +19,8 @@ export async function GET() {
 
     // If no existing public group found, create a new one
     const group = await pinata.groups.create({
-      name: "VoiceVault Public Files",
+      name: "Public Files",
+      // name: "VoiceVault Public Files",
       isPublic: true,
     });
 
